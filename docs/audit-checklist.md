@@ -62,9 +62,22 @@ Evidence links point to screenshots and mappings in the repo.
 
 ---
 
+## Step 7 — IAM Governance (Permissions Boundary + MFA Conditional Policy)
+- [ ] Terraform plan & apply completed successfully ([screenshot](screenshots/step7/tf-plan.png))
+- [ ] IAM Policies created: **org-permissions-boundary** & **mfa-conditional-policy** ([screenshot](screenshots/step7/iam-policies-list.png))
+- [ ] Boundary Policy JSON reviewed — Deny privilege escalation + enforce S3 SSE-KMS ([screenshot](screenshots/step7/permissions-boundary-json.png))
+- [ ] IAM user `dev-user` attached to both governance policies ([screenshot](screenshots/step7/dev-user-policies.png))
+- [ ] Terraform outputs show both policy ARNs ([screenshot](screenshots/step7/tf-outputs.png))
+- [ ] ISO 27001 mapping: A.5.18 / A.8.23
+- [ ] NIS2 mapping: Article 21 §2 (b) — Access control & identity management
+- [ ] DORA mapping: Article 8 / 11 — ICT risk management & identity governance
+
+---
+
 ## Summary
-✅ Deployment proves:
-- Preventive controls (SCPs)
-- Detective controls (Config, Security Hub, GuardDuty)
-- Strong evidence (screenshots, Terraform code, OPA policies)
-- Compliance mappings (ISO 27001,NIST CSF, PCI DSS, NIS2, DORA, CIS AWS Foundations)
+Deployment proves:
+- **Preventive controls** — SCPs, Permissions Boundaries, and MFA Conditional Policies block misconfigurations and privilege escalation before they occur.
+- **Detective controls** — AWS Config, Security Hub, and GuardDuty continuously monitor for deviations.
+- **Governance integration** — IAM Governance layer ensures identity enforcement through Terraform-defined guardrails aligned with least-privilege and MFA assurance.
+- **Strong evidence** — Terraform code, state outputs, and screenshots demonstrate end-to-end security automation and compliance validation.
+- **Compliance mappings** — ISO 27001 (A.5.18, A.8.23), NIS2 (Art. 21 §2 b), DORA (Art. 8 / 11), NIST CSF, PCI DSS, and CIS AWS Foundations Benchmarks.

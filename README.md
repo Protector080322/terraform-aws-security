@@ -1,31 +1,44 @@
 [![terraform-security-checks](https://github.com/amina0806/terraform-aws-security-multi-account/actions/workflows/plan.yml/badge.svg)](https://github.com/amina0806/terraform-aws-security-multi-account/actions/workflows/plan.yml)
-# Enterprise AWS Secure Baseline (Terraform + Policy-as-Code)
 
-This project demonstrates the design and implementation of a **secure AWS multi-account foundation** using Infrastructure-as-Code and Compliance-as-Code practices.
-It reflects how regulated organizations (finance, payments, critical infrastructure) can meet **ISO 27001, PCI DSS, NIS2, and DORA requirements** while building on AWS at scale.
+# Enterprise IAM & Security Governance Automation (Terraform + Policy-as-Code)
+
+This project demonstrates how to design and automate **identity, access, and compliance governance** across multi-account AWS environments using **Infrastructure-as-Code** and **Policy-as-Code** practices.
+
+It reflects how regulated organizations (finance, payments, critical infrastructure, AI-driven industries) can achieve **ISO 27001, PCI DSS, NIS2, and DORA compliance** through secure identity architecture, least-privilege enforcement, and auditable automation.
+
+---
 
 ## Key Capabilities
 
-- **Enterprise account structure** with AWS Organizations and Service Control Policies (SCPs) to enforce governance and region restrictions.
-- **Centralized logging** (CloudTrail, CloudWatch, S3 + KMS) with encryption, versioning, and audit readiness.
-- **Compliance monitoring** via AWS Config Conformance Packs for continuous risk assessment.
-- **Threat detection & response** using Security Hub and GuardDuty as CSPM building blocks.
-- **Policy-as-Code (OPA/Rego)** to automate enforcement of encryption, IAM boundaries, and mandatory security services in CI/CD pipelines.
-- **IAM/PAM guardrails** with permission boundaries and MFA enforcement for least-privilege access.
+- **IAM Governance-as-Code** — Automated permission boundaries, MFA enforcement, and least-privilege policies using Terraform.
+- **Privileged Access Management (PAM)** — Conditional access enforcement for sensitive IAM, KMS, and CloudTrail operations.
+- **Access Control Orchestration** — Combined SCPs, permission boundaries, and MFA conditions for enterprise identity governance.
+- **Compliance-as-Code** — Continuous mapping of AWS controls to ISO 27001, NIS2, DORA, and PCI DSS.
+- **Audit-Ready Evidence** — Version-controlled artifacts, validated policies, and structured screenshots aligned with governance frameworks.
+- **Multi-Cloud Extensibility** — Designed for adaptation to Azure Entra ID and GCP IAM.
+- *(Future Scope: AI Governance-as-Code)* — Extend the same control automation model to AI systems and data governance.
+
+---
 
 ## Compliance Alignment
 
-- **ISO/IEC 27001:2022** → Annex A controls for encryption, logging, and access management.
-- **PCI DSS** → Logging (Req. 10), encryption (Req. 3), and access control (Req. 7–8).
-- **NIS2 (EU Directive)** → Article 21 (access control, cryptography, risk management) and Article 23 (incident reporting).
-- **DORA (EU Regulation)** → Article 8 (ICT risk management, monitoring), Article 23 (incident handling), and Article 30 (third-party governance).
+- **ISO/IEC 27001:2022** → A.5.18 (Access rights management), A.8.23 (Cloud service use), A.8.24 (Cryptography).
+- **NIS2 (EU Directive)** → Article 21: Access control, cryptography, risk management, MFA.
+- **DORA (EU Regulation)** → Article 8: ICT risk management and identity governance automation.
+- **PCI DSS** → Requirements 7–8: Role-based access control and MFA enforcement for administrators.
 
 ---
 
 ### Positioning
-This portfolio project is not a lab demo but an **end-to-end enterprise baseline** that proves capability in **Terraform, IAM/PAM, Policy-as-Code, and EU compliance mapping**.
-It shows how I can deliver **secure landing zones** that are both technically hardened and **audit-ready** for regulators.
 
+This portfolio represents an **end-to-end IAM & Compliance Automation Framework** — not a lab demo.
+It demonstrates my ability to deliver:
+- **IAM/PAM guardrails** with permission boundaries and conditional MFA.
+- **Policy-as-Code enforcement** with Terraform, OPA/Rego, tfsec, and Checkov.
+- **Governance automation** aligned with ISO 27001, NIS2, and DORA.
+- **Regulator-ready evidence** for secure access control and compliance reporting.
+
+My focus: **IAM/PAM & Security Automation Engineering** — building scalable, accountable access governance for cloud and emerging AI systems.
 
 ---
 
@@ -43,22 +56,44 @@ It shows how I can deliver **secure landing zones** that are both technically ha
   - [Step 4 — Security Services (CSPM + Threat Detection) (Detailed Evidence)](#step-4--security-services-cspm--threat-detection-detailed-evidence)
   - [Step 5 — Policy-as-Code (OPA/Rego) (Detailed Evidence)](#step-5--policy-as-code-oparego-detailed-evidence)
   - [Step 6 — AWS Organizations & SCPs (Detailed Evidence)](#step-6--aws-organizations--scps-detailed-evidence)
+  - [Step 7 — IAM Governance (Permissions Boundary + MFA Conditional Policy)](#step-7--iam-governance-permissions-boundary--mfa-conditional-policy)
 - [CI/CD & Security Gates](#cicd--security-gates)
 - [Inputs & Variables](#inputs--variables)
 - [Troubleshooting](#troubleshooting)
 - [Contact](#contact)
 
-
 ---
 
 ### Features
-- **AWS Organizations + SCPs**: region restriction, deny root, protect security services, require MFA for IAM writes.
-- **Centralized Logging**: CloudTrail (multi-region, validation), KMS-encrypted S3 log bucket, CloudWatch Logs.
-- **Continuous Compliance**: AWS Config + starter Conformance Pack.
-- **CSPM + Threat Detection**: Security Hub (CIS + AFSBP), GuardDuty (S3 Protection + Malware Protection).
-- **Policy-as-Code**: OPA/Rego checks on Terraform **plan.json** + tfsec + Checkov.
-- **Evidence-first**: curated screenshots & outputs managers can audit quickly.
-- **Extensible to Azure/GCP environments**: Easily adaptable to Azure/GCP with minor adjustments.
+
+- **IAM/PAM Governance**: permission boundaries, MFA conditional access, least-privilege IAM roles.
+- **AWS Organizations + SCPs**: prevent risky actions, region restriction, enforce security services.
+- **Centralized Logging**: CloudTrail (multi-region, validated), KMS-encrypted S3 log bucket, CloudWatch Logs.
+- **Continuous Compliance**: AWS Config Conformance Packs with Terraform-based governance.
+- **Threat Detection**: Security Hub + GuardDuty integrated as continuous CSPM controls.
+- **Policy-as-Code**: OPA/Rego checks, tfsec, and Checkov automated in CI/CD pipelines.
+- **Evidence-first**: Screenshot-driven documentation for audits.
+- **Future-ready**: Extendable to AI Governance (model access and compliance automation).
+
+---
+
+## Deployment
+
+Supports multi-environment deployment (`dev`, `prod`) with **remote state + KMS encryption** and **pre-apply compliance validation**.
+
+### 1) Prerequisites
+- **AWS CLI** with admin role/session (**MFA recommended**)
+- **Terraform v1.6+**
+- **Remote state backend (S3 + DynamoDB)**
+
+```bash
+aws s3api create-bucket --bucket amina-tf-state --region us-east-1
+aws dynamodb create-table \
+  --table-name amina-tf-locks \
+  --attribute-definitions AttributeName=LockID,AttributeType=S \
+  --key-schema AttributeName=LockID,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST
+
 
 ---
 
@@ -143,15 +178,15 @@ terraform apply tfplan
 
 Full details (with screenshots + ISO mappings) → [Audit Checklist](docs/audit-checklist.md)
 
-
-| Step | Area                         | Controls Verified                          | Evidence |
-|------|------------------------------|--------------------------------------------|----------|
-| 1    | Remote State (S3 + DynamoDB) | SSE-KMS, versioning, state locking          | [View](docs/audit-checklist.md#step-1--remote-state-s3--dynamodb) |
-| 2    | Centralized Logging          | Org-wide CloudTrail, encrypted log bucket   | [View](docs/audit-checklist.md#step-2--centralized-logging) |
-| 3    | Config & Conformance Packs   | Config recorder + conformance pack          | [View](docs/audit-checklist.md#step-3--aws-config--conformance-packs) |
-| 4    | Security Hub & GuardDuty     | Standards enabled, Org aggregation          | [View](docs/audit-checklist.md#step-4--security-hub--guardduty) |
-| 5    | Policy-as-Code               | tfsec, Checkov, OPA evaluation              | [View](docs/audit-checklist.md#step-5--policy-as-code-oparego-tfsec-checkov) |
-| 6    | Organizations & SCPs         | OU structure, Region/Service guardrails     | [View](docs/audit-checklist.md#step-6--aws-organizations--scps) |
+| Step | Area                         | Controls Verified                                           | Evidence |
+|------|------------------------------|-------------------------------------------------------------|----------|
+| 1    | Remote State (S3 + DynamoDB) | SSE-KMS, versioning, state locking                          | [View](docs/audit-checklist.md#step-1--remote-state-s3--dynamodb) |
+| 2    | Centralized Logging          | Org-wide CloudTrail, encrypted log bucket                   | [View](docs/audit-checklist.md#step-2--centralized-logging) |
+| 3    | Config & Conformance Packs   | Config recorder + conformance pack                          | [View](docs/audit-checklist.md#step-3--aws-config--conformance-packs) |
+| 4    | Security Hub & GuardDuty     | Standards enabled, Org aggregation                          | [View](docs/audit-checklist.md#step-4--security-hub--guardduty) |
+| 5    | Policy-as-Code               | tfsec, Checkov, OPA evaluation                              | [View](docs/audit-checklist.md#step-5--policy-as-code-oparego-tfsec-checkov) |
+| 6    | Organizations & SCPs         | OU structure, Region/Service guardrails                     | [View](docs/audit-checklist.md#step-6--aws-organizations--scps) |
+| 7    | IAM Governance               | Permissions Boundary + MFA Conditional Policy enforcement    | [View](docs/audit-checklist.md#step-7--iam-governance-permissions-boundary--mfa-conditional-policy) |
 
 
 ---
@@ -183,17 +218,18 @@ Full details (with screenshots + ISO mappings) → [Audit Checklist](docs/audit-
 - Modular Terraform structure with `dev` and `prod` environments.
 
 ---
+
 ## Project Steps & Locations
 
-| Step | Purpose                          | Primary code locations                           | Proofs (screenshots)                    |
-|-----:|----------------------------------|---------------------------------------------------|-----------------------------------------|
-| 1    | State backend (S3+DDB, KMS)      | envs/dev/step1-state.tf, modules/state/*         | docs/screenshots/step1_*                |
-| 2    | Logging (CloudTrail, CW, KMS)    | envs/dev/step2-logging.tf, modules/logging/*     | docs/screenshots/step2_*                |
-| 3    | Config & Conformance             | envs/dev/step3-conformance.tf, envs/dev/conformance/step3-custom.yaml | docs/screenshots/step3_* |
-| 4    | Security Hub & GuardDuty         | envs/dev/step4-security.tf, modules/security/*   | docs/screenshots/step4_*                |
-| 5    | Policy-as-Code (OPA/Rego)        | policies-as-code/opa/**                          | docs/screenshots/step5_*                |
-| 6    | Organizations & SCPs (optional)  | envs/dev/step6-org-scps.tf, modules/org/scps/**  | docs/screenshots/step6_*                |
-
+| Step | Purpose                                   | Primary code locations                                  | Proofs (screenshots)                |
+|-----:|-------------------------------------------|----------------------------------------------------------|------------------------------------|
+| 1    | State backend (S3+DDB, KMS)               | envs/dev/step1-state.tf, modules/state/*                | docs/screenshots/step1_*           |
+| 2    | Logging (CloudTrail, CW, KMS)             | envs/dev/step2-logging.tf, modules/logging/*            | docs/screenshots/step2_*           |
+| 3    | Config & Conformance                      | envs/dev/step3-conformance.tf, envs/dev/conformance/step3-custom.yaml | docs/screenshots/step3_* |
+| 4    | Security Hub & GuardDuty                  | envs/dev/step4-security.tf, modules/security/*          | docs/screenshots/step4_*           |
+| 5    | Policy-as-Code (OPA/Rego)                 | policies-as-code/opa/**                                 | docs/screenshots/step5_*           |
+| 6    | Organizations & SCPs (optional)           | envs/dev/step6-org-scps.tf, modules/org/scps/**         | docs/screenshots/step6_*           |
+| 7    | IAM Governance (Permissions Boundary + MFA Policy) | envs/dev/step7-iam.tf, modules/iam/permission-boundary/* | docs/screenshots/step7_*           |
 
 ---
 
@@ -465,6 +501,45 @@ tf-aws-secure-baseline/
   - Art. 8: Governance — preventive guardrails for critical ICT assets
   - Art. 30: Third-party ICT governance — restrict use to approved regions/services
 
+
+---
+## Step 7 — IAM Governance (Permissions Boundary + MFA Conditional Policy)
+
+## What this proves
+- I can design and implement **IAM governance guardrails** that prevent privilege escalation and enforce MFA for sensitive actions.
+- Demonstrates integration of **policy-as-code** with identity and access management governance.
+- Provides an auditable, Terraform-driven approach to **least-privilege enforcement** across AWS identities.
+
+---
+
+### Screenshots
+
+| Proof | Screenshot |
+|-------|------------|
+| ✅ Terraform Plan / Apply — IAM Governance Module | ![Plan Apply](docs/screenshots/step7/tf-plan.png) |
+| ✅ IAM Policies List — Shows `org-permissions-boundary` and `mfa-conditional-policy` | ![Policies List](docs/screenshots/step7/iam-policies-list.png) |
+| ✅ Permissions Boundary Policy JSON — Deny Privilege Escalation + Enforce S3 SSE-KMS | ![Boundary JSON](docs/screenshots/step7/permissions-boundary-json.png) |
+| ✅ IAM User `dev-user` Attached to Boundary & MFA Policies | ![User Policies](docs/screenshots/step7/dev-user-policies.png) |
+| ✅ Terraform Outputs — Boundary & MFA ARNs | ![TF Outputs](docs/screenshots/step7/tf-outputs.png) |
+
+---
+
+### Security Highlights
+- **Permissions Boundary** blocks IAM privilege-escalation actions and enforces KMS-encrypted S3 uploads.
+- **MFA Conditional Policy** requires MFA for sensitive IAM, KMS, CloudTrail, and Config operations.
+- Enforces **defense-in-depth** through multiple governance layers: SCP (Org) → Boundary (Principal) → MFA (Condition).
+- Fully managed and version-controlled via **Terraform modules** and **Policy-as-Code** patterns.
+
+---
+
+### Compliance Mapping
+- **ISO/IEC 27001:2022**
+  - A.5.18 — Access rights management (permissions boundary prevents escalation)
+  - A.8.23 — Information security in use of cloud services (IAM guardrails as code)
+- **NIS2 (Article 21 § 2 b)** — Access control & identity management (MFA for admin actions)
+- **DORA (Article 8 / 11)** — ICT risk management & identity governance (automated IAM controls)
+
+
 ---
 
 ## CI/CD & Security Gates
@@ -574,8 +649,8 @@ See [docs/variables.md](docs/variables.md) for the full list of supported inputs
 ### Contacts
 
 **Amina Jiyu An**
-Cloud Security & Compliance Engineer | Terraform • IAM/PAM • Policy-as-Code • DevSecOps |
-ISO 27001 • PCI DSS • NIS2 • DORA
+IAM/PAM • Security & Compliance Automation Engineer
+|Terraform • IAM/PAM • Policy-as-Code • ISO 27001 • PCI DSS • NIS2 • DORA
 - LinkedIn: [linkedin.com/in/amina0806](https://www.linkedin.com/in/amina0806/)
 - GitHub: [github.com/amina0806](https://github.com/amina0806)
 - Email: [amina.an0806@gmail.com](mailto:amina.an0806@gmail.com)

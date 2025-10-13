@@ -1,6 +1,5 @@
 
 data "aws_iam_policy_document" "boundary" {
-  # Block classic escalation stuff (defense-in-depth)
   statement {
     sid    = "DenyIamPrivilegeEscalation"
     effect = "Deny"
@@ -18,7 +17,6 @@ data "aws_iam_policy_document" "boundary" {
     resources = ["*"]
   }
 
-  # Enforce SSE-KMS on S3 PutObject (same logic as SCP, but at principal level)
   statement {
     sid       = "DenyPutObjectWithoutSSEHeader"
     effect    = "Deny"
@@ -30,6 +28,13 @@ data "aws_iam_policy_document" "boundary" {
       variable = "s3:x-amz-server-side-encryption"
       values   = ["true"]
     }
+  }
+
+  statement {
+    sid       = "BoundaryAllowAll"
+    effect    = "Allow"
+    actions   = ["*"]
+    resources = ["*"]
   }
 
   statement {
@@ -72,8 +77,4 @@ resource "aws_iam_policy" "boundary" {
   name   = var.name
   path   = var.path
   policy = data.aws_iam_policy_document.boundary.json
-}
-
-output "permissions_boundary_arn" {
-  value = aws_iam_policy.boundary.arn
 }

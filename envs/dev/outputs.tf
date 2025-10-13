@@ -10,6 +10,10 @@ output "ou_ids" {
   value = module.organizations.ou_ids
 }
 
-output "policy_arns" {
-  value = module.organizations.policy_arns
+output "permissions_boundary_arn" {
+  value       = try(module.permissions_boundary[0].permissions_boundary_arn, null)
+}
+
+output "mfa_policy_arn" {
+  value       = try(module.permissions_boundary[0].mfa_policy_arn, null)
 }
