@@ -1,0 +1,63 @@
+# =============================================================================
+# .gitignore — terraform-aws-security
+# NIS2 Art.25: NEVER commit secrets, plans, or state files
+# =============================================================================
+
+# ─── Terraform state (NEVER commit — contains secrets!) ───
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# ─── Terraform plan files (may contain account IDs, ARNs) ───
+*.tfplan
+*.tfplan.*
+plan.json
+plan_*.json
+tfplan
+
+# ─── Terraform variables with secrets ───
+*.tfvars.local
+secrets.tfvars
+*.auto.tfvars
+
+# ─── AWS credentials ───
+.aws/
+*.pem
+*.key
+*_rsa
+*_rsa.pub
+credentials
+.env
+.env.*
+
+# ─── IDE & OS ───
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# ─── Compliance reports (may contain infra details) ───
+reports/
+*.report.json
+
+# ─── Temporary files ───
+/tmp/
+*.tmp
+*.bak
+*.orig
+
+# ─── Lambda build artifacts ───
+/tmp/*.zip
+lambda_function.zip
+
+# ─── infracost ───
+infracost-base.json
+infracost.json
+
+# ─── Log files ───
+*.log
